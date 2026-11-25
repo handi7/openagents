@@ -696,7 +696,7 @@ function MembershipHome({
     // Also end the central openagents.org session — otherwise the login
     // redirect immediately re-authenticates and bounces back here. On localhost
     // there's no central login, so just fall through to the inline sign-in gate.
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && !desktopHost()) {
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && process.env.NEXT_PUBLIC_INLINE_LOGIN !== '1' && !desktopHost()) {
       window.location.href = 'https://openagents.org/logout';
     }
   };
@@ -864,7 +864,7 @@ const LOGIN_BOUNCE_KEY = 'oa_login_bounce_at';
 
 function SignInGate({ signIn }: { signIn: () => Promise<void> }) {
   const t = useT();
-  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || !!desktopHost());
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || process.env.NEXT_PUBLIC_INLINE_LOGIN === '1' || !!desktopHost());
   const [showInline, setShowInline] = useState(false);
 
   useEffect(() => {
